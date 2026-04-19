@@ -17,9 +17,7 @@ set asc  to mj:ascent.
 global function LaunchSequenceSubOrbital {
     print "Counting down for launch...".
     print "Engine detected " + engineName.
-    get_spoolup_time(engineName).
-    set mechJeb to get_mechJeb_status()
-    
+    set mechJeb to get_mechJeb_status().
     set countdown to 10.
     set startTime to time:seconds.
     until countdown < 0 {
@@ -41,15 +39,18 @@ global function LaunchSequenceSubOrbital {
         if countdown = 3 {
             print "Engine ignition".
         }
-        set t_spool to get_spoolup_time(engineName).
+        set countdown to -1.
+        set startTime to time:seconds.
+    }
+    wait 0.1.
+        local t_spool to get_spoolup_time(engineName).
+        print "Waiting for engine spool up: T- " + t_spool.
         wait t_spool.
-        if countdown = 0 {
-            if info:ttwr < 1.2 {
-                print "Engine malfunction detected, aborting launch".
-                lock throttle to 0.
-                toggle abort.
+        if info:ttwr < 1.2 {
+            print "Engine malfunction detected, aborting launch".
+            lock throttle to 0.
+            toggle abort.
             }
-        }
         }
         // Wait for liftoff and check for engine shutoff.
         if info:ttwr < 1.2 {
@@ -59,7 +60,6 @@ global function LaunchSequenceSubOrbital {
         wait until ship:verticalvelocity > 5.
         print "Liftoff detected, continuing ascent".
         }
-    }
 
 
 
