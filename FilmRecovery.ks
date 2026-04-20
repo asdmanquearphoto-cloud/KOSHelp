@@ -2,7 +2,7 @@
 
 //*********************PARAMETERS AND VARIABLES**********************.
 parameter mechJeb is true. // Set to true if using MechJeb for ascent control, false for manual throttle control.
-set engineName to "Model 39". // Set to the name of the engine used for the mission, e.g. "Model 39" or "Mainsail".
+parameter engineName is "Model 39". // Set to the name of the engine used for the mission, e.g. "Model 39" or "Mainsail".
 
 //****************************************************************.
 //*********************** MISSION SEQUENCE ***********************.
@@ -24,6 +24,15 @@ if mechJeb {
 }
 LaunchSequenceSuborbital().
 lock throttle to 1.
+until info:tdv < 100 {
+    if check_engine_failure() {
+        print "Engine failure detected, aborting launch.".
+        lock throttle to 0.
+        toggle abort.
+        shutdown.
+        }
+    wait 0.1.
+}
 when ship:altitude > 75000 then {
     print "Reached 75km altitude, deploying fairing.".
     toggle ag1.

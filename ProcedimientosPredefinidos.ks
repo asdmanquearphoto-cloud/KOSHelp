@@ -53,14 +53,6 @@ global function LaunchSequenceSubOrbital {
             toggle abort.
             }
         }
-        // Wait for liftoff and check for engine shutoff.
-        if info:ttwr < 1.2 {
-            print "Engine malfunction detected, aborting launch".
-            lock throttle to 0.
-            toggle abort.
-        wait until ship:verticalvelocity > 5.
-        print "Liftoff detected, continuing ascent".
-        }
 
 
 
@@ -87,4 +79,10 @@ function get_mechJeb_status {
     } else {
         return "inactive".
     }
+}
+function check_engine_failure {
+    if (info:ttwr < 1.0) {
+        return true.
+    }
+    return false.
 }
