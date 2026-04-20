@@ -15,6 +15,7 @@ set info to mj:info.
 set asc  to mj:ascent.
 //*********************************************** MECHJEB WRAPPERS END ***********************************************.
 global function LaunchSequenceSubOrbital {
+    parameter engineName.
     print "Counting down for launch...".
     print "Engine detected " + engineName.
     set mechJeb to get_mechJeb_status().
